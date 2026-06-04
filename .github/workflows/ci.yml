@@ -1,39 +1,37 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+- main
 
 jobs:
+build:
 
-  build:
+```
+runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+steps:
 
-    steps:
+  - uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
+  - name: Setup Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: "3.12"
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+  - name: Install Dependencies
+    run: |
+      python -m pip install --upgrade pip
+      pip install mlflow
 
-      - name: Install Dependencies
-        run: |
-          pip install mlflow
+  - name: Run MLflow Project
+    run: |
+      mlflow run MLProject --env-manager=local
 
-      - name: Run MLflow Project
-        run: |
-          mlflow run MLProject --env-manager=local
-      - name: Save mlruns
-        run: |
-          git config --global user.name "${{ secrets.username }}"
-          git config --global user.email "${{ secrets.email }}"
-
-          git add .
-
-          git commit -m "Save mlruns" || true
-
-          git push
+  - name: Upload mlruns artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: mlruns
+      path: mlruns/
+```
