@@ -1,7 +1,12 @@
-name: training-model
+name: diabetes-mlflow
 
 conda_env: conda.yaml
 
 entry_points:
   main:
-    command: "python modelling.py"
+    parameters:
+      dataset:
+        type: string
+        default: "diabetes_preprocessing/train_preprocessing.csv"
+
+    command: "python modelling.py {dataset}"
