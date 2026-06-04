@@ -1,11 +1,20 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+import os
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-data = pd.read_csv("train_pca.csv")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+csv_path = os.path.join(
+    current_dir,
+    "diabetes_preprocessing",
+    "train_preprocessing.csv"
+)
+
+data = pd.read_csv(csv_path)
 
 X = data.drop("Credit_Score", axis=1)
 y = data["Credit_Score"]
